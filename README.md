@@ -1,47 +1,106 @@
-# INSAT-3DR Cloud Motion Forecasting
-
-## Overview
-
-Accurate short-term cloud motion forecasting remains challenging due to the limitations of optical flow and deterministic CNN models, which often produce blurry outputs and fail to capture uncertainty in rapidly evolving weather systems.
-
-This project explores:
-
-- Deterministic UNet-based forecasting
-- Conditional Diffusion-based probabilistic forecasting
-
-using multispectral INSAT-3DR/3DS Level-1C satellite imagery (VIS, IR, WV).
+# 🔭 INSAT-3DR Cloud Motion Forecasting  
+### Deterministic and Probabilistic Deep Learning for Short-Term Satellite Nowcasting
 
 ---
 
-## Dataset
+## 🌍 Motivation
 
-Source: MOSDAC (INSAT-3DR / 3DS)
+Accurate short-term cloud motion forecasting (nowcasting) is critical for:
 
-Input:
-- 4–6 past frames (multispectral)
+- Severe weather monitoring  
+- Aviation safety  
+- Renewable energy planning  
+- Disaster preparedness  
 
-Output:
-- 1–2 future frames
+Traditional approaches such as optical flow, block matching, and deterministic CNN-based methods often struggle with:
 
-Data is parsed from HDF5, normalized, and structured into spatio-temporal sequences.
+- Blurry predictions  
+- Poor generalization during rapid atmospheric evolution  
+- Inability to model uncertainty in chaotic weather systems  
+
+This project explores both deterministic and probabilistic deep learning approaches for modeling cloud dynamics using multispectral satellite imagery from INSAT-3DR / INSAT-3DS.
+
+---
+
+## 🛰 Dataset
+
+**Source:** MOSDAC – INSAT-3DR / 3DS Level-1C  
+
+**Channels Used:**
+- Visible (VIS)
+- Infrared (IR)
+- Water Vapor (WV)
+
+**Preprocessing Pipeline:**
+- HDF5 parsing  
+- Channel normalization  
+- Temporal window construction  
+- Spatio-temporal sequence generation  
+
+### Prediction Setup
+
+| Input | Output |
+|--------|--------|
+| 4–6 past multispectral frames | 1–2 future cloud frames |
+
+Sequences are constructed to model temporal cloud evolution dynamics.
 
 ---
 
-## Models
+## 🧠 Models Implemented
 
-### 1. UNet Baseline
-- Encoder-decoder CNN
-- Skip connections
-- Multi-channel input
-- Predicts future cloud frames directly
+### 1️⃣ UNet Baseline (Deterministic Forecasting)
 
-### 2. Diffusion Model
-- Conditional denoising diffusion probabilistic model (DDPM)
-- Timestep embeddings
-- UNet backbone
-- Learns probabilistic cloud evolution
+A multi-channel encoder–decoder CNN with skip connections.
+
+**Key Features:**
+- Multi-spectral input handling  
+- Spatial feature preservation via skip connections  
+- Direct future frame regression  
+- Efficient training and inference  
+
+This serves as a strong deterministic baseline for comparison.
 
 ---
+
+### 2️⃣ Conditional Diffusion Model (Probabilistic Forecasting)
+
+A Denoising Diffusion Probabilistic Model (DDPM) with a UNet backbone.
+
+**Core Components:**
+- Forward noise schedule  
+- Reverse denoising process  
+- Timestep embeddings  
+- Conditional multi-frame input  
+
+Instead of predicting frames directly, the model learns to model the distribution of future cloud states, enabling:
+
+- Sharper outputs  
+- Reduced blurring  
+- Uncertainty-aware forecasting  
+- Improved robustness under volatile atmospheric conditions  
+
+---
+
+## 📐 Architecture Overview
+
+### Deterministic Path
+Past Frames → UNet Encoder → Bottleneck → Decoder → Future Frames
+
+
+### Diffusion Path
+Future Frame + Noise → Conditional UNet → Predicted Noise
+Iterative Denoising → Sampled Future Forecast
+
+
+---
+
+## 📊 Evaluation Metrics
+
+- Mean Squared Error (MSE)  
+- Root Mean Squared Error (RMSE)  
+- Structural Similarity Index (SSIM)  
+- Visual qualitative comparisons  
 
 ## Author
 
