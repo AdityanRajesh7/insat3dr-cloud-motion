@@ -84,13 +84,28 @@ Instead of predicting frames directly, the model learns to model the distributio
 
 ## 📐 Architecture Overview
 
-### Deterministic Path
-Past Frames → UNet Encoder → Bottleneck → Decoder → Future Frames
+## 🧩 Deterministic UNet Architecture
+
+```mermaid
+flowchart LR
+    A[Past Multispectral Frames] --> B[UNet Encoder]
+    B --> C[Bottleneck Features]
+    C --> D[UNet Decoder]
+    D --> E[Predicted Future Frames]
+```
 
 
-### Diffusion Path
-Future Frame + Noise → Conditional UNet → Predicted Noise
-Iterative Denoising → Sampled Future Forecast
+## 🌫 Conditional Diffusion Architecture
+
+```mermaid
+flowchart LR
+    A[Ground Truth Future Frame] --> B[Add Gaussian Noise]
+    B --> C[Noisy Future Frame]
+    C --> D[Conditional UNet + Timestep Embedding]
+    D --> E[Predicted Noise]
+    E --> F[Reverse Denoising Step]
+    F --> G[Sampled Future Forecast]
+```
 
 
 ---
